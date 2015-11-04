@@ -9,42 +9,40 @@ Step 1: Run Kismet
 import subprocess
 import sys
 
-run_kismet = None
-
 try: 
-    if (subprocess.call(['kismet', '-version']) == 0):
-    	run_kismet = True
-    	print "Found"
+    subprocess.call(['kismet'])
 except: 
     print "No Kismet executable found"
     sys.exit(0)
 
+
 '''
-Step 2: After running Kismet for 15 min, rename pcapbtbb file name
-'''
+Step 2: After running Kismet for 15 min, rename pcapbtbb file name.
+
+This will repeat for every other 15 min when Kismet is still running
 '''
 import threading
 import os
 import shutil
 
 def renameFile():
-    print "Renaming pcapbtbb file ..."
-    if run_kismet:
+	# set timer to repeat every 15 minutes
+	threading.Timer(5.0, renameFile).start()
+	print "After 15 min, renaming pcapbtbb file ..."
 	for filename in os.listdir("."):
 		# find file name that starts with Kismet
 		if filename.startswith("Kismet"):
 			# Copy file to another file
 			shutil.copy2(filename, 'bluecount.pcapbtbb')
-
 			# Remove original file
 			os.remove(filename)
 
 
-# Timmer(seconds, call)
-threading.Timer(900.0, renameFile).start()
+# Timer(seconds, call)
+threading.Timer(5.0, renameFile).start()
 
 
-
+'''
 def printit():
   threading.Timer(5.0, printit).start()
   print "Hello, World!"
