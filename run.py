@@ -44,7 +44,7 @@ def pipePcaptoText(pcapfile, textfile):
 	try:
 		print "\nUse tshark to read", pcapfile, "\n====================================="
 		# read pcapbtbb file using wireshark and save to out
-		out = subprocess.check_output(['tshark','-r', pcapfile])
+		out = subprocess.check_output(['tshark','r', pcapfile], stderr=subprocess.STDOUT)
 
 		if out:
 			print "\nSave output to", textfile
